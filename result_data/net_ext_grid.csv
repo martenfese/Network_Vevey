@@ -1,0 +1,2 @@
+,name,bus,vm_pu,va_degree,in_service,s_sc_max_mva,rx_min,rx_max
+0,External grid,283,1.03,0.0,True,10000.0,0.1,0.1

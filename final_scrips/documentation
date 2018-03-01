@@ -1,0 +1,93 @@
+############# Schlachtplan ###############
+##########################################
+##########################################
+#### Preprocessing ####
+###############################
+### Pre-processData_network ###
+## Row Data ##
+# network.txt
+## Output ##
+# Nodes ID with coordinates
+# Subnetwork connections ID with coordinates
+# Subnetwork ID coordinates
+# (optional) Intermediate Nodes ID with position in its section 
+# Section ID with From and To Node
+# Transformer Setting 
+# Source Equivalent
+# Underground line setting 
+# DGGENERATIONMODEL
+###################################
+### Pre-processDataRe_equipment ###
+## Row Data ###
+# Equipment.txt
+## Output ##
+# Transformer parameter and their equiment ID
+# cable parameter and their cable ID
+#############################
+### PreprocessData_Feeder ###
+## Row Data ##
+# loads_feeders_MT/COPE_XX (5 different xls files)
+## Output ##
+# Total Feeder current over one year 
+##########################################
+
+##################
+#### NetworkX ####
+### Row Data ###
+## Row Data from Network.txt ##
+# Network/Nodes: Coordinates for each Nodes
+# Network/Subnetwork Connections: Coordinates for Subnetwork Connection Nodes
+# Network/Subnetworks: Single coordinate for each Subnetwork (Not sure, if its the center of the subnetwork or some special node)
+# (optional) Network/Intermediate Nodes: Coordinates and position in connection
+#
+# Network/Sections: List of all Sections connecting Nodes (but the Intermediate Nodes)
+# Network/Transformer Setting: Network information of the transformers
+## Row Data from Equipment.txt ##
+# Equipment/Transformer: Equipment information of the transformers 
+
+### Data modification ###
+## (optional, but highly recommendated if necessary) Subnetwork_recration.ipynb: Rearrange the coordinates for the Subnetwork Nodes
+# Input: 1) Network/Nodes, 2) Network/Subnetwork Connections, 3) Network/Sections:
+## (optional) intermediate_rearrange.ipynb: Implement the Intermediate Node in the plot 
+# a) Creating sections for the Intermediate Nodes based on the starting and ending Node
+# b) Change Intermediate Node ID based on its section and its postion (in form as: sectionID(n))
+
+### Output ###
+## Graph plot of the network
+## Combined and modified (coordiantes) data tables of Nodes and Sections
+# Nodes
+# subnetwork connection nodes
+# subnetwork nodes
+# grid_island
+##########################################
+####################
+#### Pandapower ####
+### Additional Row Data ###
+## Row Data from network.txt ##
+# Network/Source Equivalent: Voltage of chosen (?) Nodes 
+# Network/Underground line setting: Give each section a cable ID
+# Network/DGGENERATIONMODEL: Photovoltaics installed peak power
+## Row Data from Equipment.txt ##
+# Equipment/cable: Information about the physical parameters for each cable ID
+## Row Data from Feeder.txt ##
+# Total amount of current in the 5 feeder
+## Extern Data ##
+# Demand profils for different building types (household, office, education, ect.
+# Solar radiation data
+
+### Data modification ###
+## Creating grid islands, where each node in this grid has the same voltage ##
+# 1) NetworkX.ipynb: Creating the grid_island.json file to create the islands
+# 2) Voltage_check_grid_island.ipynb: Comparing Nodes of Source Equivalent with Nodes of grid_island and identifing the voltage of each grid 
+
+#########################################
+#### Process ####
+# 1) Create all preprocess datafiles
+# 2a) Load the Subnetwork datafile in Subnetwork_recreation to rearrange the coordinates
+# 2b) Load the Intermediate Node datafile in Intermediate_rearrange to create new sections and change the Node IDs
+# 3) Load them in NetworkX
+# 4) Create the new datafiles for the nodes and sections (maybe need to be uncommented)
+# 5) In same step as 4) create the grid_island.json file and open it with Voltage_check_grid_island for the voltage of each subgrid
+# 6a) Load Pandapower_grid_final with the Nodes and Sections files from NetworkX and other datafiles from the proprocessing
+# 6b) Arrange the voltage towards the island grids based on the information from step 5) (e.g.: grid[1] == 0.42)
+
